@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ProductRateModel>
+
+<div class="container">
+    <div class="heading">
+        Product List
+    </div>
+    <div>
+        <a id="btnAddProduct" asp-controller="ProductRate" asp-action="AddNewProductRate" class="btn btn-warning addBtn">Add New Product</a>
+    </div>
+    <div class="data">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" width="10%">ID</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Rate</th>
+                    <th scope="col">Date Of Rate</th>
+                    <th scope="col" width="30%">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var productRate in Model)
+                {
+                    <tr>
+                        <td>@productRate.Id</td>
+                        <td>@productRate.ProductName</td>
+                        <td>@productRate.Rate</td>
+                        <td>@productRate.DateOfRate.ToShortDateString()</td>
+                        <td>
+                            <a id="btnEdit" asp-controller="ProductRate" asp-action="EditProductRate" asp-route-id="@productRate.Id" asp-route-productId="@productRate.ProductId" asp-route-rate="@productRate.Rate" asp-route-dateOfRate="@productRate.DateOfRate.ToLongTimeString()" class="btn btn-info">Edit</a>
+                            <a data-value="@productRate.Id" id="btnDelete" asp-controller="ProductRate" asp-action="DeleteProductRate" asp-route-id="@productRate.Id" class="btn btn-danger" onclick="return confirm('Are You Sure... You want to Delete this Product Rate ?')">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

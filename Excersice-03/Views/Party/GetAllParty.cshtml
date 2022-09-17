@@ -1,0 +1,35 @@
+﻿@model IEnumerable<PartyModel>
+
+<div class="container">
+    <div class="heading">
+        Party List
+    </div>
+    <div>
+        <a id="btnAddParty" asp-controller="Party" asp-action="AddNewParty" class="btn btn-warning addBtn">Add New Party</a>
+    </div>
+    <div class="data">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var party in Model)
+                {
+                    <tr>
+                        <td>@party.Id</td>
+                        <td>@party.PartyName</td>
+                        <td>
+                            <a id="btnEdit" asp-controller="Party" asp-action="EditParty" asp-route-id="@party.Id" asp-route-partyName="@party.PartyName" class="btn btn-info">Edit</a>
+                            <a data-value="@party.Id" id="btnDelete" asp-controller="Party" asp-action="DeleteParty" asp-route-id="@party.Id"
+                               class="btn btn-danger" onclick="return confirm('Are You Sure... You want to Delete this Party ?')">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

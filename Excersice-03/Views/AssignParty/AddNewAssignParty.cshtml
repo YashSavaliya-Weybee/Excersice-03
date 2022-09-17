@@ -1,0 +1,54 @@
+﻿@inject Excersice_03.Repository.IPartyRepository _partyRepository
+@inject Excersice_03.Repository.IProductRepository _productRepository
+@model Excersice_03.Models.AssignPartyModel;
+
+<div class="container">
+    <h2 class="text-center">@(ViewBag.isEdit?"Edit Assign Party":"Add New ASsign Party")</h2>
+    @if (ViewBag.isSuccess == 1)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Party @ViewBag.partyName assigned to Product @ViewBag.productName sucessfully.</strong>
+        </div>
+    }
+    else if (ViewBag.isSuccess == 2)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            This <strong>Party</strong> and <strong>Product</strong> pair is already assigned...!<br />
+            Please Choose different <strong>Product</strong> for this <strong>Party</strong>.
+        </div>
+    }
+    <div class="data">
+        <form method="post" asp-controller="AssignParty" asp-action="@(ViewBag.isEdit?"EditAssignParty":"AddNewAssignParty")">
+            <table>
+                <tr>
+                    <td>Party Name</td>
+                    <td>:</td>
+                    <td>
+                        <select asp-for="PartyId" asp-items="(await _partyRepository.GetAllParty()).Select(x=> new SelectListItem() { Text=x.PartyName,Value=x.Id.ToString() })" class="form-control">
+                            <option value="">Select Party</option>
+                        </select>
+                    </td>
+                    <td><span asp-validation-for="PartyId" class="text-danger"></span></td>
+                </tr>
+                <tr>
+                    <td>Product Name</td>
+                    <td>:</td>
+                    <td>
+                        <select asp-for="ProductId" asp-items="(await _productRepository.GetAllProduct()).Select(x=> new SelectListItem() { Text=x.ProductName,Value=x.Id.ToString() })" class="form-control">
+                            <option value="">Select Product</option>
+                        </select>
+                    </td>
+                    <td><span asp-validation-for="ProductId" class="text-danger"></span></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input id="btnEdit" type="submit" class="btn btn-success" value="@(ViewBag.isEdit?"Update":"Save") " />&nbsp;
+                        <a asp-controller="AssignParty" asp-action="GetAllAssignParty" class="btn btn-light">Cancel</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>

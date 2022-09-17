@@ -1,0 +1,22 @@
+﻿
+.heading {
+    text-align: center;
+    font-size: 35px;
+    padding: 10px;
+}
+
+.addBtn {
+    float: right;
+}
+
+    .addBtn:hover {
+        text-decoration: none;
+    }
+
+.data {
+    margin-top: 70px;
+}
+
+table {
+    margin: auto;
+}

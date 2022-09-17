@@ -1,0 +1,126 @@
+﻿@inject Excersice_03.Repository.IPartyRepository _partyRepository
+@inject Excersice_03.Repository.IProductRepository _productRepository
+
+@model InvoiceModel
+<div class="container">
+    <h2 class="text-center">Invoice</h2>
+    <div class="data">
+        <form method="post" enctype="multipart/form-data" asp-controller="Invoice" asp-action="AddNewInvoice">
+            <table>
+                <tr>
+                    <td>Party Name</td>
+                    <td>:</td>
+                    <td>
+                        <select asp-for="PartyId" id="ddlParty" asp-items="(await _partyRepository.GetAllParty()).Select(x=> new SelectListItem() { Text=x.PartyName,Value=x.Id.ToString() })" class="form-control">
+                            <option value="">Select Party</option>
+                        </select>
+                    </td>
+                    <td><span asp-validation-for="PartyId" class="text-danger"></span></td>
+                </tr>
+                <tr>
+                    <td>Product Name</td>
+                    <td>:</td>
+                    <td>
+                        <select asp-for="ProductId" id="ddlProduct" class="form-control">
+                            <option value="">Select Product</option>
+                        </select>
+                    </td>
+                    <td><span asp-validation-for="ProductId" class="text-danger"></span></td>
+                </tr>
+                <tr>
+                    <td>Rate</td>
+                    <td>:</td>
+                    <td><input asp-for="Rate" id="txtRate" readonly="readonly" class="form-control" value=@ViewBag.rate /></td>
+                    <td><span asp-validation-for="Rate" class="text-danger"></span></td>
+                </tr>
+                <tr>
+                    <td>Quantity</td>
+                    <td>:</td>
+                    <td><input asp-for="Quantity" class="form-control" /></td>
+                    <td><span asp-validation-for="Quantity" class="text-danger"></span></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input id="btnSubmit" type="submit" class="btn btn-success" value="Add To Invoice" />
+                    </td>
+                </tr>
+            </table>
+
+        </form>
+    </div>
+
+    <hr />
+    <div>
+        @if (ViewBag.display && ViewBag.AllInvoice != null && ViewBag.AllInvoice is List<InvoiceModel>)
+        {
+            <partial name="_displayInvoice" model="(List<InvoiceModel>)ViewBag.AllInvoice " />
+        }
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        function PartyId() {
+            $.ajax({
+                url: "https://localhost:44358/Invoice/Invoice",
+                type: 'POST',
+                //dataType: 'json',
+                data: { PartyId: PartyId },
+            })
+        }
+
+        $("#ddlParty").change(function () {
+            var PartyId = parseInt($(this).val());
+            var PartyId = $('#ddlParty option:selected').val();
+
+            if (!isNaN(PartyId)) {
+                var ddlProduct = $('#ddlProduct');
+                ddlProduct.empty();
+
+                $.ajax({
+                    url: 'https://localhost:44358/Invoice/BindProductDetails',
+                    type: 'GET',
+                    //dataType: 'json',
+                    data: { PartyId: PartyId },
+                    success: function (d) {
+                        ddlProduct.empty();
+                        ddlProduct.append($("<option></option>").val('').html('Choose Product'));
+                        $.each(d, function (i, product) {
+                            ddlProduct.append($("<option></option>").val(product.productId).html(product.productName))
+                        });
+                    },
+                    error: function () {
+                        alert('Error 500!');
+                    }
+                });
+            }
+        });
+
+        $("#ddlProduct").change(function () {
+            var ProductId = parseInt($(this).val());
+            var ProductId = $('#ddlProduct option:selected').val();
+
+            if (!isNaN(ProductId)) {
+                var rate = $('#txtRate');
+
+                $.ajax({
+                    url: 'https://localhost:44358/Invoice/BindRateDetails',
+                    type: 'GET',
+                    data: { ProductId: ProductId },
+                    success: function (d) {
+                        rate.val(d);
+                    },
+                    error: function () {
+                        alert('Error 500!');
+                    }
+                });
+            }
+        });
+    });
+</script>

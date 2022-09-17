@@ -1,0 +1,56 @@
+﻿
+@inject Excersice_03.Repository.IProductRepository _productRepository
+@model Excersice_03.Models.ProductRateModel;
+
+<div class="container">
+    <h2 class="text-center">@(ViewBag.isEdit?"Edit Product Rate":"Add New Product Rate")</h2>
+    @if (ViewBag.isSuccess == 1)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Rate added to Product @ViewBag.productName sucessfully.</strong>
+        </div>
+    }
+    else if (ViewBag.isSuccess == 2)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Rate is already assigned for this <strong>Product</strong>
+            Please Choose different <strong>Product</strong>.
+        </div>
+    }
+    <div class="data">
+        <form method="post" asp-controller="ProductRate" asp-action="@(ViewBag.isEdit?"EditProductRate":"AddNewProductRate")">
+            <table>
+                <tr>
+                    <td>Product Name</td>
+                    <td>:</td>
+                    <td>
+                        <select asp-for="ProductId" asp-items="(await _productRepository.GetAllProduct()).Select(x=> new SelectListItem() { Text=x.ProductName,Value=x.Id.ToString() })" class="form-control">
+                            <option value="">Select Product</option>
+                        </select>
+                    </td>
+                    <td><span asp-validation-for="ProductId" class="text-danger"></span></td>
+                </tr>
+                <tr>
+                    <td>Rate</td>
+                    <td>:</td>
+                    <td><input asp-for="Rate" class="form-control" /></td>
+                    <td><span asp-validation-for="Rate" class="text-danger"></span></td>
+                </tr>
+                <tr>
+                    <td>Date of Rate</td>
+                    <td>:</td>
+                    <td><input asp-for="DateOfRate" type="datetime" value="@DateTime.Today.ToString("dd-MM-yyyy")" disabled="disabled" class="form-control" /></td>
+                    <td><span asp-validation-for="DateOfRate" class="text-danger"></span></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input id="btnEdit" type="submit" class="btn btn-success" value="@(ViewBag.isEdit?"Update":"Save") " />&nbsp;
+                        <a asp-controller="ProductRate" asp-action="GetAllProductRate" class="btn btn-light">Cancel</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>

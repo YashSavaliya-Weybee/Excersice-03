@@ -1,0 +1,38 @@
+﻿
+@model Excersice_03.Models.ProductModel;
+
+<div class="container">
+    <h2 class="text-center">@(ViewBag.isEdit?"Edit Product":"Add New Product")</h2>
+    @if (ViewBag.isSuccess == 1)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Product @ViewBag.productName added sucessfully.</strong>
+        </div>
+    }
+    else if (ViewBag.isSuccess == 2)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            This <strong>Product</strong> is already Exist.
+        </div>
+    }
+    <div class="data">
+        <form method="post" asp-controller="Product" asp-action="@(ViewBag.isEdit?"EditProduct":"AddNewProduct")">
+            <table>
+                <tr>
+                    <td>Product Name</td>
+                    <td>:</td>
+                    <td><input asp-for="ProductName" class="form-control" /></td>
+                    <td><span asp-validation-for="ProductName" class="text-danger"></span></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input type="submit" class="btn btn-success" value="@(ViewBag.isEdit?"Update":"Save") " />&nbsp;
+                        <a asp-controller="Product" asp-action="GetAllProduct" class="btn btn-light">Cancel</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
