@@ -24,7 +24,7 @@
                     <td>Product Name</td>
                     <td>:</td>
                     <td>
-                        <select asp-for="ProductId" asp-items="(await _productRepository.GetAllProduct()).Select(x=> new SelectListItem() { Text=x.ProductName,Value=x.Id.ToString() })" class="form-control">
+                        <select asp-for="ProductId" asp-items="(await _productRepository.GetAllProduct()).Select(x=> new SelectListItem() { Text=x.ProductName,Value=x.Id.ToString() })" class="form-control" disabled="@( ViewBag.isDisabled? ViewBag.isDisabled : ViewBag.isDisabled )">
                             <option value="">Select Product</option>
                         </select>
                     </td>

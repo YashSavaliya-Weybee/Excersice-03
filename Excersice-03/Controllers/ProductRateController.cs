@@ -23,6 +23,7 @@ namespace Excersice_03.Controllers
         public ViewResult AddNewProductRate(string ProductName, int isSuccess = 0)
         {
             ViewBag.isEdit = false;
+            ViewBag.isDisabled = false;
             ViewBag.productName = ProductName;
             ViewBag.IsSuccess = isSuccess;
             return View();
@@ -50,6 +51,7 @@ namespace Excersice_03.Controllers
         public ViewResult EditProductRate(string productId, int rate, DateTime dateOfRate)
         {
             ViewBag.isEdit = true;
+            ViewBag.isDisabled = true;
             return View("AddNewProductRate");
         }
 

@@ -67,23 +67,16 @@ namespace Excersice_03.Repository
 
         public async Task<int> UpdateProductRate(ProductRateModel productRateModel, int productId)
         {
-            var y = _context.tblProductRate
-                    .Where(x => x.ProductId == productRateModel.ProductId).FirstOrDefault();
-
-            if (y == null)
+            var newProductRate = new ProductRate()
             {
-                var newProductRate = new ProductRate()
-                {
-                    Id = productId,
-                    ProductId = (int)productRateModel.ProductId,
-                    Rate = (int)productRateModel.Rate,
-                    DateOfRate = DateTime.UtcNow,
-                };
-                _context.tblProductRate.Update(newProductRate);
-                await _context.SaveChangesAsync();
-                return newProductRate.Id;
-            }
-            return 0;
+                Id = productId,
+                ProductId = (int)productRateModel.ProductId,
+                Rate = (int)productRateModel.Rate,
+                DateOfRate = DateTime.UtcNow,
+            };
+            _context.tblProductRate.Update(newProductRate);
+            await _context.SaveChangesAsync();
+            return newProductRate.Id;
         }
     }
 }
